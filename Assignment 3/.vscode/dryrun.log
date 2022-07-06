@@ -1,0 +1,8 @@
+make --dry-run --keep-going --print-directory
+make: Entering directory `/Users/oihejirika/Documents/School/CP-386 Operating Systems - Spring/Assignments/Assignment 3'
+gcc -Werror -Wall -g -std=gnu99 -o Question2 Question2.c -lrt -lpthread
+ 
+make: Leaving directory `/Users/oihejirika/Documents/School/CP-386 Operating Systems - Spring/Assignments/Assignment 3'
+ 
+make: *** No rule to make target `Question3.c', needed by `Question3'.
+
