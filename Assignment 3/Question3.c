@@ -72,9 +72,16 @@ int main(int argc, char *argv[])
 			if (i == 0)
 			{
 				// semWaitOrPostBasedOnThreadID(threads[i].tid[2], 1);
-				// last_thread_polarity = threads[i].tid[2];
-				sem_post(&even);
-				sem_post(&odd);
+
+				if (threads[i].tid[2] % 2 == 0)
+				{
+					sem_post(&odd);
+				}
+				else
+				{
+
+					sem_post(&even);
+				}
 			}
 
 			threads[i].state = 1;
@@ -198,31 +205,37 @@ void *threadRun(void *t) // implement this function in a suitable way
 	Thread *thread = (Thread *)t;
 	char thread_id_y = thread->tid[2];
 
+	// semWaitOrPostBasedOnThreadID(thread_id_y, 0);
+	if (thread_id_y % 2 == 0)
+	{
+		printf("EVEN sephamore locked\n");
+		sem_wait(&even);
+	}
+	else
+	{
+		printf("ODD sephamore locked\n");
+		sem_wait(&odd);
+	}
+	sem_wait(&running);
+
 	logStart(((Thread *)thread)->tid);
-	// threadsReady(Thread *threads, int threadCount)
-	printf("State %d\n\n", thread->state);
-
-	int current_thread_polarity = threadPolarity(thread_id_y);
-
-	if (last_thread_polarity == -1)
-	{
-		last_thread_polarity = current_thread_polarity;
-		printf("Last Thread Polarity %d\n", thread_id_y);
-	}
-	else if (last_thread_polarity == current_thread_polarity)
-	{
-		printf("Last thread MATCHES\n");
-	}
-	// your synchronization logic will appear here
-
-	semWaitOrPostBasedOnThreadID(thread_id_y, 0);
-
 	// critical section starts here
 	printf("[%ld] Thread %s is in its critical section\n", getCurrentTime(),
 		   ((Thread *)t)->tid);
 	// critical section ends here
 
-	semWaitOrPostBasedOnThreadID(thread_id_y, 1);
+	if (thread_id_y % 2 == 0)
+	{
+		printf("ODD sephamore freed\n");
+		sem_post(&odd);
+	}
+	else
+	{
+		printf("EVEN sephamore freed\n");
+		sem_post(&even);
+	}
+	sem_post(&running);
+	// semWaitOrPostBasedOnThreadID(thread_id_y, 1);
 
 	logFinish(((Thread *)thread)->tid);
 	((Thread *)thread)->state = -1;
@@ -270,8 +283,7 @@ void semWaitOrPostBasedOnThreadID(char thread_id, int action)
 		}
 		else
 		{
-			sem_post(&running);
-			printf("Sem posting\n\n");
+			printf("Sem posting\n");
 			if (thread_id % 2 == 0)
 			{
 				printf("ODD sephamore freed\n");
@@ -282,6 +294,7 @@ void semWaitOrPostBasedOnThreadID(char thread_id, int action)
 				printf("EVEN sephamore freed\n");
 				sem_post(&even);
 			}
+			sem_post(&running);
 		}
 		if (thread_id % 2 == 0)
 		{
