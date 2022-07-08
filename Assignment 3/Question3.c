@@ -88,13 +88,13 @@ int main(int argc, char *argv[])
 			threads[i].retVal = pthread_create(&(threads[i].handle), NULL, threadRun, &threads[i]);
 		}
 		// Checking if all the threads are ready - aka running (have state 1)
-		if (threads_ready == false)
-		{
-			printf("Checking if threads are ready %d\n", threads_ready);
-			bool ready = threadsReady(threads, threadCount);
+		// if (threads_ready == false)
+		// {
+		// 	printf("Checking if threads are ready %d\n", threads_ready);
+		// 	bool ready = threadsReady(threads, threadCount);
 
-			printf("Threads are ready %d\n\n", !ready);
-		}
+		// 	printf("Threads are ready %d\n\n", !ready);
+		// }
 	}
 	return 0;
 }
