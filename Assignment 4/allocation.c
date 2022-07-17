@@ -54,6 +54,18 @@ int main(int argc, char *argv[])
 
 void RQ_command(char *process_name, int size, char *allocation_algorithm)
 {
+    if(strcmp(allocation_algorithm, "F") == 0){
+        printf("%s %d %s\n", process_name, size, allocation_algorithm);
+    }
+    else if(strcmp(allocation_algorithm, "B") == 0){
+        printf("%s %d %s\n", process_name, size, allocation_algorithm);
+    }
+    else if(strcmp(allocation_algorithm, "W") == 0){
+        printf("%s %d %s\n", process_name, size, allocation_algorithm);
+    }
+    else{
+        printf("Invalid allocation algorithm.\n");
+    }
 }
 void RL_command(char *process_name)
 {
