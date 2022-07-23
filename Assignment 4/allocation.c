@@ -16,25 +16,29 @@ struct PROCESS
     int valid; // true 1 or false 0
 };
 
+// Command functions
 void RQ_command(int process_number, int size, char *allocation_algorithm); // Request command
 void RL_command(int process_number);                                       // Release command
 void C_command();                                                          // Compact command
 void Status_command();                                                     // Status command
 
+// Main funcitons
 void initialize_memory(int size);
 void first_fit(int process_number, int size);
 void best_fit(int process_number, int size);
 void worst_fit(int process_number, int size);
-void update_holes_list();
 
 int findFirstFit(int size);
 int findBestFit(int size);
 int findWorstFit(int size);
 
+// Utility functions
 void insertProcess(int process_number, int size);
 void updateHole(int hole_number, int size);
 void mergeHolesifTouching(int hole_number, int next_hole_number);
 void mergeHoleToNeighborsIfTouching(int hole_number);
+int calculate_total_used_memory();
+int calculate_total_Free_memory();
 
 struct HOLE hole_list[100];
 struct PROCESS process_list[100];
@@ -43,10 +47,6 @@ int memory;
 
 int main(int argc, char *argv[])
 {
-
-    // char *a = argv[1];
-    // int size = atoi(a);
-    // initialize_memory(size);
     initialize_memory(atoi(argv[1]));
 
     while (1)
@@ -61,27 +61,27 @@ int main(int argc, char *argv[])
         scanf("%s %s %d %s", base_command, argument_1, &argument_2, argument_3);
         if (strcmp(base_command, "RQ") == 0)
         {
-            printf("RQ was entered");
+            printf("RQ was entered\n");
             RQ_command(argument_1[1], argument_2, argument_3);
         }
         else if (strcmp(base_command, "RL") == 0)
         {
-            printf("RL was entered");
+            printf("RL was entered\n");
             RL_command(argument_1[1]);
         }
         else if (strcmp(base_command, "C") == 0)
         {
-            printf("C was entered");
+            printf("C was entered\n");
             C_command();
         }
         else if (strcmp(base_command, "Status") == 0)
         {
-            printf("Status was entered");
+            printf("Status was entered\n");
             Status_command();
         }
         else if (strcmp(base_command, "Exit") == 0)
         {
-            printf("Exit was entered");
+            printf("Exit was entered\n");
             break;
         }
         else
@@ -152,39 +152,49 @@ int findWorstFit(int size)
     return biggest_hole_index;
 }
 
-int findSuitableHole(int size) {
+int findSuitableHole(int size)
+{
     // find the first hole that is big enough
-    for (int i = 0; i < num_holes; i++) {
-        if (hole_list[i].length >= size) {
+    for (int i = 0; i < num_holes; i++)
+    {
+        if (hole_list[i].length >= size)
+        {
             return i;
         }
     }
     return -1;
 }
 
-void insertProcess(int process_number, int size) {
+void insertProcess(int process_number, int size)
+{
     // insert the process into the process list
     process_list[process_number].start_address = hole_list[process_number].base;
     process_list[process_number].limit = size;
     process_list[process_number].valid = 1;
 }
 
-void updateHole(int hole_number, int size) {
+void updateHole(int hole_number, int size)
+{
     // update the hole list
     hole_list[hole_number].base = hole_list[hole_number].base + size;
     hole_list[hole_number].length = hole_list[hole_number].length - size;
 }
 
-void mergeHolesifTouching(int hole_number, int next_hole_number) {
+void mergeHolesifTouching(int hole_number, int next_hole_number)
+{
     // merge the two holes if they touch
-    if (hole_number < next_hole_number){
-        if (hole_list[hole_number].base + hole_list[hole_number].length == hole_list[next_hole_number].base) {
+    if (hole_number < next_hole_number)
+    {
+        if (hole_list[hole_number].base + hole_list[hole_number].length == hole_list[next_hole_number].base)
+        {
             hole_list[hole_number].length = hole_list[hole_number].length + hole_list[next_hole_number].length;
             hole_list[next_hole_number].valid = 0;
         }
     }
-    else if (next_hole_number < hole_number){
-        if (hole_list[next_hole_number].base + hole_list[hole_number].length == hole_list[hole_number].base) {
+    else if (next_hole_number < hole_number)
+    {
+        if (hole_list[next_hole_number].base + hole_list[hole_number].length == hole_list[hole_number].base)
+        {
             hole_list[hole_number].base = hole_list[next_hole_number].base;
             hole_list[hole_number].length = hole_list[hole_number].length + hole_list[next_hole_number].length;
             hole_list[next_hole_number].valid = 0;
@@ -192,19 +202,24 @@ void mergeHolesifTouching(int hole_number, int next_hole_number) {
     }
 }
 
-void mergeHoleToNeighborsIfTouching(int hole_number) {
+void mergeHoleToNeighborsIfTouching(int hole_number)
+{
     // merge the hole with the neighbors if they touch
-    if (hole_list[hole_number].base > 0) {
+    if (hole_list[hole_number].base > 0)
+    {
         mergeHolesifTouching(hole_number, hole_number - 1);
     }
-    if (hole_list[hole_number].base + hole_list[hole_number].length < 100) {
+    if (hole_list[hole_number].base + hole_list[hole_number].length < 100)
+    {
         mergeHolesifTouching(hole_number, hole_number + 1);
     }
 }
 
-void mergeAllHolesifTouching() {
+void mergeAllHolesifTouching()
+{
     // merge all the holes
-    for (int i = 0; i < num_holes; i++) {
+    for (int i = 0; i < num_holes; i++)
+    {
         mergeHoleToNeighborsIfTouching(i);
     }
 }
@@ -212,20 +227,23 @@ void mergeAllHolesifTouching() {
 // // COMMAND FUNCTIONS
 void RQ_command(int process_number, int size, char *allocation_algorithm)
 {
-    if(strcmp(allocation_algorithm, "F") == 0){
+    if (strcmp(allocation_algorithm, "F") == 0)
+    {
         printf("\n%d %d %s\n", process_number, size, allocation_algorithm);
         first_fit(process_number, size);
-        
     }
-    else if(strcmp(allocation_algorithm, "B") == 0){
+    else if (strcmp(allocation_algorithm, "B") == 0)
+    {
         printf("\n%d %d %s\n", process_number, size, allocation_algorithm);
         best_fit(process_number, size);
     }
-    else if(strcmp(allocation_algorithm, "W") == 0){
+    else if (strcmp(allocation_algorithm, "W") == 0)
+    {
         printf("%d %d %s\n", process_number, size, allocation_algorithm);
         worst_fit(process_number, size);
     }
-    else{
+    else
+    {
         printf("Invalid allocation algorithm.\n");
     }
 }
@@ -235,29 +253,34 @@ void RL_command(int process_number)
     struct PROCESS process = process_list[process_number];
     int freed_memory_start = process.start_address;
     int freed_memory_end = process.start_address + process.limit;
-    process_list[process_number] = NULL;
+    process_list[process_number].start_address = NULL;
+    process_list[process_number].limit = NULL;
+    process_list[process_number].valid = NULL;
 
     struct HOLE hole;
     hole_index = findSpaceForNewHole();
-    if (hole_index != -1){
+    if (hole_index != -1)
+    {
         hole = hole_list[i];
-        printf("Successfully released memory for process P%d", process_number);
+        printf("Successfully released memory for process P%d\n", process_number);
+        mergeHoleToNeighborsIfTouching(i);
     }
-    else{
-        mergeHoleToNeighborsIfTouching();
+    else
+    {
+        printf("Unable to release memory\n");
     }
-
-    // struct HOLE hole = hole_list
-
 }
 
-int findSpaceForNewHole(){
-    for (int i = 0; i < num_holes; i++){
-        if (hole_list[i] == NULL){
+int findSpaceForNewHole()
+{
+    for (int i = 0; i < num_holes; i++)
+    {
+        if (hole_list[i] == NULL)
+        {
             return i
         }
     }
-    return -1
+    return -1;
 }
 
 void C_command()
@@ -279,7 +302,7 @@ void Status_command()
     }
 
     // print out holes
-     printf("\Holes [Free memory = %d]\n", calculate_total_free_memory());
+    printf("\Holes [Free memory = %d]\n", calculate_total_free_memory());
 
     // print out processes
     for (int i = 0; i < num_processes; i++)
@@ -291,77 +314,92 @@ void Status_command()
     }
 }
 
-void calculate_total_used_memory(){
+int calculate_total_used_memory()
+{
     int total_used_memory = 0;
 
-    for (int i = 0; i < num_processes; i++) {
+    for (int i = 0; i < num_processes; i++)
+    {
         total_used_memory = total_used_memory + process_list[i].limit;
     }
-    
+
     return total_used_memory;
 }
 
-void calculate_total_free_memory(){
+int calculate_total_free_memory()
+{
     int total_free_memory = 0;
 
-    for (int i = 0; i < num_processes; i++) {
+    for (int i = 0; i < num_processes; i++)
+    {
         total_free_memory = total_free_memory + hole_list[i].length;
     }
-    
+
     return total_free_memory;
 }
 
-// // ALLOCATION ALGORITHMS
+// ALLOCATION ALGORITHMS
 
-void first_fit(int process_number, int size) {
+void first_fit(int process_number, int size)
+{
     // find the first hole that is big enough
     int hole_number = findFirstFit(size);
-    if (hole_number == -1) {
+    if (hole_number == -1)
+    {
         printf("No hole of sufficient size\n");
-    } else {
+    }
+    else
+    {
         // insert the process into the process list
         insertProcess(process_number, size);
         // update the hole list
         updateHole(hole_number, size);
         // merge the holes if they touch
         mergeAllHolesifTouching();
-        printf("Successfull allocated %d to process P%d\n", size, process_number);
+        printf("Successfully allocated %d to process P%d\n", size, process_number);
     }
 }
 
-void best_fit(int process_number, int size) {
+void best_fit(int process_number, int size)
+{
     // find the best hole that is big enough
     int hole_number = findBestFit(size);
-    if (hole_number == -1) {
+    if (hole_number == -1)
+    {
         printf("No hole of sufficient size\n");
-    } else {
+    }
+    else
+    {
         // insert the process into the process list
         insertProcess(process_number, size);
         // update the hole list
         updateHole(hole_number, size);
         // merge the holes if they touch
         mergeAllHolesifTouching();
-        printf("Successfull allocated %d to process P%d\n", size, process_number);
+        printf("Successfully allocated %d to process P%d\n", size, process_number);
     }
 }
 
-void worst_fit(int process_number, int size) {
+void worst_fit(int process_number, int size)
+{
     // find the worst hole that is big enough
     int hole_number = findWorstFit(size);
-    if (hole_number == -1) {
+    if (hole_number == -1)
+    {
         printf("No hole of sufficient size\n");
-    } else {
+    }
+    else
+    {
         // insert the process into the process list
         insertProcess(process_number, size);
         // update the hole list
         updateHole(hole_number, size);
         // merge the holes if they touch
         mergeAllHolesifTouching();
-        printf("Successfull allocated %d to process P%d\n", size, process_number);
+        printf("Successfully allocated %d to process P%d\n", size, process_number);
     }
 }
 
-void update_holes_list(){
-
+void update_holes_list()
+{
 }
-
