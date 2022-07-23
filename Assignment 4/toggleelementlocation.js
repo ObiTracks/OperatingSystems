@@ -1,1 +1,0 @@
-toggleelementlocation = function(element, location) {
