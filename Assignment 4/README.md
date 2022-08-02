@@ -2,6 +2,10 @@
 
 ---
 
+# Summary
+This assignment is designed to simulate the processes that pertain to memory allocation in operating systems. It simulates a pool of available memory from which memory can be assigned to and released from different processes.
+---
+
 # Make File
 
 ---
@@ -34,6 +38,9 @@ The make file provides a striaghtforward way to compile and run the program for 
     - <process number> : Any integer from 0 - 100
     - <size> : Any integer less than 1000000bytes
     - <allocation algorithm> : F (First Fit), B (Best Fit), W (Worst Fit)
+2. Release memory from processes
+3. Compact memory from available holes
+4. Check the status of used memory in the system.
 
 # Test Cases
 
