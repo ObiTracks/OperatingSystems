@@ -3,8 +3,8 @@
 ---
 
 # Summary
-This assignment is designed to simulate the processes that pertain to memory allocation in operating systems. It simulates a pool of available memory from which memory can be assigned to and released from different processes.
 ---
+This assignment is designed to simulate the processes that pertain to memory allocation in operating systems. It simulates a pool of available memory from which memory can be assigned to and released from different processes.
 
 # Make File
 
@@ -51,6 +51,9 @@ The make file provides a striaghtforward way to compile and run the program for 
 ---
 
 # About Developers
+---
+Obi Ihejirika: 3rd year BBA/CS student passionatd about computer science and educating future generations to build amazing things through tech.
+
 
 # Liscence to Use Code
     MIT Liscence
