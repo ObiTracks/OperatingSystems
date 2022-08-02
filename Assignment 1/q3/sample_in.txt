@@ -1,5 +1,0 @@
-free -h
-ls -l -a -F
-whoami
-uptime -p
-pwd

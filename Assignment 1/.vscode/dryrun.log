@@ -1,9 +1,0 @@
-make --dry-run --always-make --keep-going --print-directory
-make: Entering directory `/Users/oihejirika/Documents/School/CP-386 Operating Systems - Spring/Assignments/Assignment 1'
-make: Leaving directory `/Users/oihejirika/Documents/School/CP-386 Operating Systems - Spring/Assignments/Assignment 1'
- 
-make: *** No rule to make target `z_creator.c', needed by `z_creator'.
-make: *** No rule to make target `z_terminator.c', needed by `z_terminator'.
-make: *** No rule to make target `process_management.c', needed by `warnings_OK'.
-make: *** No rule to make target `assignment_average.c', needed by `assignment_average'.
-
