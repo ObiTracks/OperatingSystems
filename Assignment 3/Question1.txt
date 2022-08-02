@@ -1,1 +1,0 @@
-Yes the philosophers problem requirments are satisfied.This is because each of the philosophers will be able to eat with both their right and left chopstick, then release them for the next philosopher to eat. The situations in which deadlock could occur are if there are more than 4 philosophers, an even philosopher should pick their right chopstick  then left, and vice versa for 
