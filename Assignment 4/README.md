@@ -52,7 +52,7 @@ The make file provides a striaghtforward way to compile and run the program for 
 
 # About Developers
 ---
-Obi Ihejirika: 3rd year BBA/CS student passionatd about computer science and educating future generations to build amazing things through tech.
+Obi Ihejirika: 3rd year BBA/CS student passionated about computer science and educating future generations to build amazing things through tech. VP of Technology at LCS and the LCS Pods program.
 
 
 # Liscence to Use Code
