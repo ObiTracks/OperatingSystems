@@ -53,3 +53,4 @@ The make file provides a striaghtforward way to compile and run the program for 
 # About Developers
 
 # Liscence to Use Code
+    MIT Liscence
